@@ -19,7 +19,7 @@ Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 * **`p_remove_reservation`**: Usuwa rezerwacje dzialki.
 
 ### Widoki
-* **`v_dostepne_dzialki`**: Widok tylko wolnych gruntów
+* **`v_available_plots`**: Widok tylko wolnych gruntów
 * **`v_sales_report`**: Zestawienie pokazujące sumaryczną wartość działek zakupionych przez kazdego klienta
 
 ### Triggery
