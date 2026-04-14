@@ -20,12 +20,12 @@ Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 
 ### Widoki
 * **`v_available_plots`**: Widok tylko wolnych gruntów
-* **`v_sales_report`**: Zestawienie pokazujące sumaryczną wartość działek zakupionych przez kazdego klienta
+* **`v_client_summary`**: Podsumowanie klienta
 
 ### Triggery
 * **`trg_plot_reserved`**: Zmienia stan rezerwacji dzialki po pojawieniu sie zmiany w `reservations`.
 * **`trg_client_balance`**: Aktualizuje posiadane srodki na koncie klienta po zmianie w systemie platnosci `payments`.
+* **`trg_update_payments`**: Aktualizuje posiadane srodki na koncie klienta po zmianie w systemie platnosci `payments`.
 
 ### Funkcje
 * **`fn_plots_sold_between`**: Raport sprzedazy rezerwacji w danym przedziale dat.
-* **`fn_owned_plots`**: Zwraca dzialki zarezerwowane przez danego klienta.

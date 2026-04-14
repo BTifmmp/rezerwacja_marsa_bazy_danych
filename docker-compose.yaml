@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:18.3 
+    container_name: mars_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend/database:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
+
