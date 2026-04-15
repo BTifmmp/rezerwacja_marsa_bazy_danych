@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       balance: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: false,
-        defaultValue: 0.0
+        defaultValue: sequelize.literal('0.0')
       }
     },
     {
