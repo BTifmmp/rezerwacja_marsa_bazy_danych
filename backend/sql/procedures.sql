@@ -36,7 +36,7 @@ AS $$
 DECLARE v_is_owned BOOLEAN;
 DECLARE v_previous_balance_change DECIMAL(15, 2);
 BEGIN
-    SELECT (reserved_by = p_client_id) INTO v_is_owned 
+    SELECT (reserved_by = p_client_id) INTO v_is_owned
     FROM plots 
     WHERE id = p_plot_id
     FOR UPDATE;
