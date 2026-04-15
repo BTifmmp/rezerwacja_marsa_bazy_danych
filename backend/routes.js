@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../database/models');
+const db = require('./database/models');
 
 // All clients
 router.get('/clients', async (req, res) => {
