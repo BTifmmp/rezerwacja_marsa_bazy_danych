@@ -3,16 +3,15 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./database/models');
+const routes = require('./routes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/health', (_req, res) => {
-  res.json({ ok: true });
-});
+app.use('/api', routes);
 
 async function start() {
   try {
