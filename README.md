@@ -1,5 +1,5 @@
 ## MarsReservation - rezerwacja działek na marsie
-Blazej Turczynowicz
+Blazej Turczynowicz  
 Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 
 * **Technologie backend:** Node.js (Express), PostgreSQL, biblioteka `pg`.
