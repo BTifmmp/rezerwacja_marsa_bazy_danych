@@ -50,6 +50,7 @@ Kod znajduje sie w katalogu `sql`.
 - Przeprowadz inicjalizacje bazy korzystajac z sequlize:
   1.  `npm install`
   2.  `npm run db:migrate`
+- Urochomienie serwera - `npm start` - port defaultowy `3000`
 
 ---
 
