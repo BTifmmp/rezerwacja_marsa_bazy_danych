@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Rezerwacja Marsa - API",
+    "description": "Kolekcja do testowania systemu rezerwacji parceli na Marsie.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Klienci",
+      "item": [
+        {
+          "name": "Pobierz wszystkich klientów",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:3000/api/clients"
+          }
+        },
+        {
+          "name": "Podsumowanie klienta (Widok)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/client-summary/:clientId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "client-summary",
+                ":clientId"
+              ],
+              "variable": [
+                {
+                  "key": "clientId",
+                  "value": "1",
+                  "description": "ID klienta do pobrania podsumowania"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Dodaj klienta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Elon\",\n    \"lastName\": \"Musk\"\n}"
+            },
+            "url": "http://localhost:3000/api/add-client"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dzialki",
+      "item": [
+        {
+          "name": "Dostępne Dzialki (Widok)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:3000/api/plots"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rezerwacje",
+      "item": [
+        {
+          "name": "Zrób rezerwację (Procedura)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"clientId\": 1,\n    \"plotId\": 2\n}"
+            },
+            "url": "http://localhost:3000/api/reserve"
+          }
+        },
+        {
+          "name": "Usuń rezerwację (Procedura)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"clientId\": 1,\n    \"plotId\": 2\n}"
+            },
+            "url": "http://localhost:3000/api/remove-reservation"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -55,3 +55,12 @@ Kod znajduje sie w katalogu `sql`.
 ---
 
 ## Komunikacja z serwerem - endpointy
+
+| Metoda   | Endpoint                       | Opis                                                | Body                       |
+| -------- | ------------------------------ | --------------------------------------------------- | -------------------------- |
+| **GET**  | `api/clients`                  | Pobiera listę wszystkich klientów.                  | brak                       |
+| **GET**  | `api/client-summary/:clientId` | Pobiera widok podsumowania dla konkretnego klienta. | `:clientId` (w URL)        |
+| **GET**  | `api/plots`                    | Pobiera listę wszystkich dostępnych parceli.        | brak                       |
+| **POST** | `api/reserve`                  | Wywołuje procedurę rezerwacji działki.              | `{ "clientId", "plotId" }` |
+| **POST** | `api/remove-reservation`       | Wywołuje procedurę usunięcia rezerwacji.            | `{ "clientId", "plotId" }` |
+| **POST** | `api/add-client`               | Tworzy i zapisuje nowego klienta w bazie.           | `{ "name", "lastName" }`   |
