@@ -6,12 +6,13 @@ DECLARE v_plot_price DECIMAL(15, 2);
 DECLARE v_balance_change DECIMAL(15, 2);
 DECLARE v_is_available BOOLEAN;
 BEGIN
-    SELECT balance INTO v_client_balance FROM clients WHERE id = p_client_id FOR UPDATE;
     SELECT price, (reserved_by IS NULL) 
     INTO v_plot_price, v_is_available
     FROM plots
     WHERE id = p_plot_id 
     FOR UPDATE;
+
+    SELECT balance INTO v_client_balance FROM clients WHERE id = p_client_id FOR UPDATE;
 
     IF NOT v_is_available THEN
         RAISE EXCEPTION 'Plot % is already reserved.', p_plot_id;
@@ -26,7 +27,11 @@ BEGIN
         RAISE EXCEPTION 'Not enough balance to reserve the plot.';
     END IF;
 
-COMMIT;
+    COMMIT;
+
+    EXCEPTION WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
 END;
 $$;
 
@@ -47,7 +52,8 @@ BEGIN
 
     SELECT balance_change INTO v_previous_balance_change
     FROM reservations
-    WHERE client_id = p_client_id AND plot_id = p_plot_id AND operation = 'add';
+    WHERE client_id = p_client_id AND plot_id = p_plot_id AND operation = 'add'
+    FOR UPDATE;
 
     INSERT INTO reservations (client_id, plot_id, operation, balance_change)
     VALUES (p_client_id, p_plot_id, 'remove', -v_previous_balance_change);
@@ -55,5 +61,8 @@ BEGIN
     UPDATE plots SET reserved_by = NULL WHERE id = p_plot_id;
 
     COMMIT;
+    EXCEPTION WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
 END;
 $$;

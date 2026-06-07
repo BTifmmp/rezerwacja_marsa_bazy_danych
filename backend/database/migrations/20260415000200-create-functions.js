@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,11 +12,11 @@ module.exports = {
           amount DECIMAL(15, 2),
           size DECIMAL(15, 2)
       ) AS $$
-          SELECT
-              r.created_at,
-              c.name || ' ' || c.last_name,
+          SELECT 
+              r.created_at, 
+              (c.name || ' ' || c.last_name)::VARCHAR(255), 
               r.plot_id,
-              ABS(r.balance_change),
+              ABS(r.balance_change)::DECIMAL(15, 2), 
               p.size
           FROM reservations r
           JOIN clients c ON r.client_id = c.id
@@ -24,11 +24,11 @@ module.exports = {
           WHERE r.operation = 'add'
               AND r.created_at BETWEEN p_start_date AND p_end_date
               AND NOT EXISTS (
-                  SELECT 1 FROM reservations r2
+                  SELECT 1 FROM reservations r2 
                   WHERE r2.client_id = r.client_id
-                    AND r2.plot_id = r.plot_id
-                    AND r2.operation = 'remove'
-                    AND r2.created_at > r.created_at
+                  AND r2.plot_id = r.plot_id
+                  AND r2.operation = 'remove'
+                  AND r2.created_at > r.created_at
               )
           ORDER BY r.created_at DESC;
       $$ LANGUAGE sql;
@@ -39,5 +39,5 @@ module.exports = {
     await queryInterface.sequelize.query(`
       DROP FUNCTION IF EXISTS fn_plots_sold_between(TIMESTAMP, TIMESTAMP);
     `);
-  }
+  },
 };

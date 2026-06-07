@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { Model } = require('sequelize');
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {}
@@ -11,36 +11,44 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       client_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'clients',
-          key: 'id'
-        }
+          model: "clients",
+          key: "id",
+        },
       },
       amount: {
         type: DataTypes.DECIMAL(15, 2),
-        allowNull: false
+        allowNull: false,
       },
       created_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-      }
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     },
     {
       sequelize,
-      modelName: 'Payment',
-      tableName: 'payments',
-      timestamps: false
-    }
+      modelName: "Payment",
+      tableName: "payments",
+      timestamps: false,
+      indexes: [
+        {
+          fields: ["client_id", "created_at"],
+        },
+      ],
+    },
   );
 
-  Payment.associate = models => {
-    Payment.belongsTo(models.Client, { foreignKey: 'client_id', onDelete: 'RESTRICT' });
+  Payment.associate = (models) => {
+    Payment.belongsTo(models.Client, {
+      foreignKey: "client_id",
+      onDelete: "RESTRICT",
+    });
   };
 
   return Payment;

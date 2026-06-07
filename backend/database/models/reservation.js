@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { Model } = require('sequelize');
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Reservation extends Model {}
@@ -11,49 +11,60 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       client_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'clients',
-          key: 'id'
-        }
+          model: "clients",
+          key: "id",
+        },
       },
       plot_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'plots',
-          key: 'id'
-        }
+          model: "plots",
+          key: "id",
+        },
       },
       operation: {
-        type: DataTypes.ENUM('add', 'remove'),
-        allowNull: false
+        type: DataTypes.ENUM("add", "remove"),
+        allowNull: false,
       },
       balance_change: {
         type: DataTypes.DECIMAL(15, 2),
-        allowNull: false
+        allowNull: false,
       },
       created_at: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-      }
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     },
     {
       sequelize,
-      modelName: 'Reservation',
-      tableName: 'reservations',
-      timestamps: false
-    }
+      modelName: "Reservation",
+      tableName: "reservations",
+      timestamps: false,
+      indexes: [
+        {
+          fields: ["client_id", "plot_id", "created_at"],
+        },
+      ],
+    },
   );
 
-  Reservation.associate = models => {
-    Reservation.belongsTo(models.Client, { foreignKey: 'client_id', onDelete: 'RESTRICT' });
-    Reservation.belongsTo(models.Plot, { foreignKey: 'plot_id', onDelete: 'RESTRICT' });
+  Reservation.associate = (models) => {
+    Reservation.belongsTo(models.Client, {
+      foreignKey: "client_id",
+      onDelete: "RESTRICT",
+    });
+    Reservation.belongsTo(models.Plot, {
+      foreignKey: "plot_id",
+      onDelete: "RESTRICT",
+    });
   };
 
   return Reservation;

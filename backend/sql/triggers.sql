@@ -8,7 +8,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_update_payments
 AFTER INSERT ON reservations
-REFERENCING NEW TABLE AS newtab
 FOR EACH ROW
 EXECUTE FUNCTION f_update_payments();
 
@@ -23,7 +22,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_client_balance
 AFTER INSERT ON payments
-REFERENCING NEW TABLE AS newtab
 FOR EACH ROW
 EXECUTE FUNCTION f_update_user_balance();
 
@@ -39,7 +37,6 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_plot_reserved
 AFTER INSERT ON reservations
-REFERENCING NEW TABLE AS newtab
 FOR EACH ROW
 EXECUTE FUNCTION f_update_reserved();
 

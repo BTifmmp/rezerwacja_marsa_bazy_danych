@@ -8,9 +8,9 @@ RETURNS TABLE (
 ) AS $$
     SELECT 
         r.created_at, 
-        c.name || ' ' || c.last_name, 
+        (c.name || ' ' || c.last_name)::VARCHAR(255), 
         r.plot_id,
-        ABS(r.balance_change), 
+        ABS(r.balance_change)::DECIMAL(15, 2), 
         p.size
     FROM reservations r
     JOIN clients c ON r.client_id = c.id
