@@ -350,7 +350,7 @@ EXECUTE FUNCTION f_update_user_balance();
 
 ```
 
-### trg_update_payments - Aktualizuje posiadane srodki na koncie klienta po zmianie w systemie platnosci `payments`.
+### trg_update_payments - Po pojawieniu sie rezerwacji dodaje wiersz z płatnościa w `payments`.
 
 ```sql
 CREATE OR REPLACE FUNCTION f_update_payments() RETURNS TRIGGER AS $$
