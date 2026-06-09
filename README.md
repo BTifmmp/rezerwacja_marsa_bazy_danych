@@ -6,7 +6,7 @@ Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 - **Technologie backend:** Node.js (Express), PostgreSQL, ORM `sequlize`.
 - **Technologie frontend:** Next.js - React, komponenty Shadcn.
 
----
+Frontend wykonany w calosci przez AI.
 
 ## Schemat bazy
 
