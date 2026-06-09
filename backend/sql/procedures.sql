@@ -26,12 +26,6 @@ BEGIN
     ELSE
         RAISE EXCEPTION 'Not enough balance to reserve the plot.';
     END IF;
-
-    COMMIT;
-
-    EXCEPTION WHEN OTHERS THEN
-      ROLLBACK;
-      RAISE;
 END;
 $$;
 
@@ -59,10 +53,5 @@ BEGIN
     VALUES (p_client_id, p_plot_id, 'remove', -v_previous_balance_change);
 
     UPDATE plots SET reserved_by = NULL WHERE id = p_plot_id;
-
-    COMMIT;
-    EXCEPTION WHEN OTHERS THEN
-      ROLLBACK;
-      RAISE;
 END;
 $$;
