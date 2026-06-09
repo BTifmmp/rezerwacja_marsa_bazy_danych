@@ -420,7 +420,7 @@ $$ LANGUAGE sql;
 
 W plikach migracji jest uwzglednione seedowanie bazy, tworzy kilku klientow i kilka dzialek
 
-- Start kontenera docker - `docker-compose up -d`
+- Start kontenera docker - `docker-compose up -d` interfejs jest dotepny na porcie localhost:3000 a serwer localhost:3001
 - (Pierwszy start) - zaladowac migracje bazy `docker compose exec backend npm run db:migrate -- --config database/config/config.js`
 
 ---
