@@ -284,13 +284,6 @@ export default function Page() {
     })
   }
 
-  async function handleDeleteClient(clientId: number) {
-    await runAction("Client deleted", async () => {
-      await api.deleteClient(clientId)
-      await loadInitial()
-    })
-  }
-
   async function handleReserve(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const plotId = reservePlotId || String(availablePlots[0]?.id ?? "")
@@ -335,13 +328,6 @@ export default function Page() {
       setEditingPlot(plot)
       setPlotPrice(String(plot.price))
       setPlotSize(String(plot.size))
-    })
-  }
-
-  async function handleDeletePlot(plotId: number) {
-    await runAction("Plot deleted", async () => {
-      await api.deletePlot(plotId)
-      await reloadAfterMutation()
     })
   }
 
@@ -814,14 +800,6 @@ export default function Page() {
                               >
                                 <IconEdit />
                               </Button>
-                              <Button
-                                size="icon-sm"
-                                variant="destructive"
-                                title="Delete plot"
-                                onClick={() => void handleDeletePlot(plot.id)}
-                              >
-                                <IconTrash />
-                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -923,16 +901,6 @@ export default function Page() {
                                 }
                               >
                                 Select
-                              </Button>
-                              <Button
-                                size="icon-sm"
-                                variant="destructive"
-                                title="Delete client"
-                                onClick={() =>
-                                  void handleDeleteClient(client.id)
-                                }
-                              >
-                                <IconTrash />
                               </Button>
                             </div>
                           </TableCell>

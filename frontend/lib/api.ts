@@ -88,10 +88,6 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(payload),
     }),
-  deleteClient: (clientId: number) =>
-    apiRequest<{ message: string }>(`/clients/${clientId}`, {
-      method: "DELETE",
-    }),
   addClient: (name: string, lastName: string) =>
     apiRequest<Client>("/add-client", {
       method: "POST",
@@ -109,10 +105,6 @@ export const api = {
     apiRequest<Plot>(`/plots/${plotId}`, {
       method: "PATCH",
       body: JSON.stringify(payload),
-    }),
-  deletePlot: (plotId: number) =>
-    apiRequest<{ message: string }>(`/plots/${plotId}`, {
-      method: "DELETE",
     }),
   getPlotsSold: (startDate: string, endDate: string) =>
     apiRequest<SoldPlot[]>(

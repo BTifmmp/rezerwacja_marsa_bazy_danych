@@ -3,7 +3,8 @@
 Blazej Turczynowicz  
 Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 
-- **Technologie backend:** Node.js (Express), PostgreSQL, biblioteka `sequlize`.
+- **Technologie backend:** Node.js (Express), PostgreSQL, ORM `sequlize`.
+- **Technologie frontend:** Next.js - React, komponenty Shadcn.
 
 ---
 

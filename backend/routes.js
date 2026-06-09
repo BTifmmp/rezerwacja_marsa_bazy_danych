@@ -71,22 +71,6 @@ router.patch("/clients/:clientId", async (req, res) => {
   }
 });
 
-// Delete client
-router.delete("/clients/:clientId", async (req, res) => {
-  try {
-    const { clientId } = req.params;
-    const deletedCount = await db.Client.destroy({ where: { id: clientId } });
-
-    if (!deletedCount) {
-      return res.status(404).json({ error: "Client not found" });
-    }
-
-    res.json({ message: "Client deleted" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 //////// PLOTS
 
 // All available plots
@@ -159,22 +143,6 @@ router.patch("/plots/:plotId", async (req, res) => {
     });
 
     res.json(plot);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Delete plot
-router.delete("/plots/:plotId", async (req, res) => {
-  try {
-    const { plotId } = req.params;
-    const deletedCount = await db.Plot.destroy({ where: { id: plotId } });
-
-    if (!deletedCount) {
-      return res.status(404).json({ error: "Plot not found" });
-    }
-
-    res.json({ message: "Plot deleted" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
