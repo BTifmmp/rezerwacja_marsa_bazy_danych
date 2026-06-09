@@ -4,11 +4,29 @@ const express = require("express");
 const router = express.Router();
 const db = require("./database/models");
 
+//////// CLIENTS
+
 // All clients
 router.get("/clients", async (req, res) => {
   try {
     const clients = await db.Client.findAll();
     res.json(clients);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Single client
+router.get("/clients/:clientId", async (req, res) => {
+  try {
+    const { clientId } = req.params;
+    const client = await db.Client.findByPk(clientId);
+
+    if (!client) {
+      return res.status(404).json({ error: "Client not found" });
+    }
+
+    res.json(client);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -30,7 +48,48 @@ router.get("/client-summary/:clientId", async (req, res) => {
   }
 });
 
-// All available plots plots
+// Update client
+router.patch("/clients/:clientId", async (req, res) => {
+  try {
+    const { clientId } = req.params;
+    const { name, lastName, balance } = req.body;
+    const client = await db.Client.findByPk(clientId);
+
+    if (!client) {
+      return res.status(404).json({ error: "Client not found" });
+    }
+
+    await client.update({
+      ...(name !== undefined ? { name } : {}),
+      ...(lastName !== undefined ? { last_name: lastName } : {}),
+      ...(balance !== undefined ? { balance } : {}),
+    });
+
+    res.json(client);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete client
+router.delete("/clients/:clientId", async (req, res) => {
+  try {
+    const { clientId } = req.params;
+    const deletedCount = await db.Client.destroy({ where: { id: clientId } });
+
+    if (!deletedCount) {
+      return res.status(404).json({ error: "Client not found" });
+    }
+
+    res.json({ message: "Client deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//////// PLOTS
+
+// All available plots
 router.get("/plots", async (req, res) => {
   try {
     const plots = await db.sequelize.query(`SELECT * FROM v_available_plots;`);
@@ -39,6 +98,116 @@ router.get("/plots", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// All plots
+router.get("/plots/all", async (req, res) => {
+  try {
+    const plots = await db.Plot.findAll();
+    res.json(plots);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Single plot
+router.get("/plots/:plotId", async (req, res) => {
+  try {
+    const { plotId } = req.params;
+    const plot = await db.Plot.findByPk(plotId);
+
+    if (!plot) {
+      return res.status(404).json({ error: "Plot not found" });
+    }
+
+    res.json(plot);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Add plot
+router.post("/plots", async (req, res) => {
+  try {
+    const { price, size, reservedBy = null } = req.body;
+    const plot = await db.Plot.create({
+      price,
+      size,
+      reserved_by: reservedBy,
+    });
+
+    res.status(201).json(plot);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update plot
+router.patch("/plots/:plotId", async (req, res) => {
+  try {
+    const { plotId } = req.params;
+    const { price, size, reservedBy } = req.body;
+    const plot = await db.Plot.findByPk(plotId);
+
+    if (!plot) {
+      return res.status(404).json({ error: "Plot not found" });
+    }
+
+    await plot.update({
+      ...(price !== undefined ? { price } : {}),
+      ...(size !== undefined ? { size } : {}),
+      ...(reservedBy !== undefined ? { reserved_by: reservedBy } : {}),
+    });
+
+    res.json(plot);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete plot
+router.delete("/plots/:plotId", async (req, res) => {
+  try {
+    const { plotId } = req.params;
+    const deletedCount = await db.Plot.destroy({ where: { id: plotId } });
+
+    if (!deletedCount) {
+      return res.status(404).json({ error: "Plot not found" });
+    }
+
+    res.json({ message: "Plot deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Plot sales report
+router.get("/reports/plots-sold", async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        error: "startDate and endDate query parameters are required",
+      });
+    }
+
+    const report = await db.sequelize.query(
+      `
+      SELECT *
+      FROM fn_plots_sold_between(:startDate, :endDate)
+      `,
+      {
+        replacements: { startDate, endDate },
+      },
+    );
+
+    res.json(report[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//////// RESERVATIONS
 
 // Plot reservation
 router.post("/reserve", async (req, res) => {
@@ -61,6 +230,65 @@ router.post("/remove-reservation", async (req, res) => {
       replacements: { c: clientId, p: plotId },
     });
     res.json({ message: "Rezerwacja usunięta" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Reservation history
+router.get("/reservations", async (req, res) => {
+  try {
+    const { clientId, plotId } = req.query;
+    const where = [];
+    const replacements = {};
+
+    if (clientId !== undefined) {
+      where.push("client_id = :clientId");
+      replacements.clientId = clientId;
+    }
+
+    if (plotId !== undefined) {
+      where.push("plot_id = :plotId");
+      replacements.plotId = plotId;
+    }
+
+    const query = `
+      SELECT *
+      FROM reservations
+      ${where.length ? `WHERE ${where.join(" AND ")}` : ""}
+      ORDER BY created_at DESC
+    `;
+
+    const reservations = await db.sequelize.query(query, { replacements });
+    res.json(reservations[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//////// PAYMENTS
+
+// Payment history
+router.get("/payments", async (req, res) => {
+  try {
+    const { clientId } = req.query;
+    const where = [];
+    const replacements = {};
+
+    if (clientId !== undefined) {
+      where.push("client_id = :clientId");
+      replacements.clientId = clientId;
+    }
+
+    const query = `
+      SELECT *
+      FROM payments
+      ${where.length ? `WHERE ${where.join(" AND ")}` : ""}
+      ORDER BY created_at DESC
+    `;
+
+    const payments = await db.sequelize.query(query, { replacements });
+    res.json(payments[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

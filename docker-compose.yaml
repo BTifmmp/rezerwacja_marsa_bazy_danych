@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:18.3 
+    image: postgres:18.3
     container_name: mars_db
     restart: always
     environment:
@@ -11,12 +11,27 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
-  adminer:
-    image: adminer
-    restart: always
+
+  backend:
+    build: ./backend
+    container_name: mars_backend
     ports:
-      - 8080:8080
+      - "3001:3001"
+    environment:
+      DB_HOST: db
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: mars_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
-

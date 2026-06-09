@@ -1,31 +1,33 @@
-'use strict';
+"use strict";
 
-const express = require('express');
-const cors = require('cors');
-const db = require('./database/models');
-const routes = require('./routes');
+const express = require("express");
+const cors = require("cors");
+const db = require("./database/models");
+const routes = require("./routes");
+
+const db_host = process.env.DB_HOST || "db";
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', routes);
+app.use("/api", routes);
 
 async function start() {
   try {
     await db.sequelize.authenticate();
-    console.log('[startup] Database connection OK.');
+    console.log("[startup] Database connection OK.");
 
     await db.sequelize.sync();
-    console.log('[startup] Sequelize sync complete.');
+    console.log("[startup] Sequelize sync complete.");
 
     app.listen(PORT, () => {
-      console.log(`[startup] API listening on http://localhost:${PORT}`);
+      console.log(`[startup] API listening on ${db_host}:${PORT}`);
     });
   } catch (error) {
-    console.error('[startup] Failed to start app:', error.message);
+    console.error("[startup] Failed to start app:", error.message);
     process.exit(1);
   }
 }

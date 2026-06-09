@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
       indexes: [
         {
-          fields: ["plot_id", "reserved_by"],
+          fields: ["reserved_by"],
         },
       ],
     },
