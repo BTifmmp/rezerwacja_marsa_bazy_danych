@@ -1,6 +1,6 @@
 ## MarsReservation - rezerwacja działek na marsie
 
-Blazej Turczynowicz
+Blazej Turczynowicz  
 Repozytorium: https://github.com/BTifmmp/rezerwacja_marsa_bazy_danych
 Projekt do zarządzania sprzedaża rezerwacji działek na marsie.
 
