@@ -415,6 +415,7 @@ W plikach migracji jest uwzglednione seedowanie bazy, tworzy kilku klientow i ki
 ---
 
 ## Komunikacja z serwerem - endpointy
+Komunikcja z baza danych znajduje sie wewnątrz pliku `backend/routes`.
 
 | Metoda    | Endpoint                    | Opis                                          | Body / Query                  |
 | :-------- | :-------------------------- | :-------------------------------------------- | :---------------------------- |
