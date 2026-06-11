@@ -177,15 +177,21 @@ router.get("/reports/plots-sold", async (req, res) => {
 
 //////// RESERVATIONS
 
-// Plot reservation
 router.post("/reserve", async (req, res) => {
   const { clientId, plotId } = req.body;
+  const transaction = await db.sequelize.transaction();
+
   try {
     await db.sequelize.query("CALL p_reserve(:c, :p)", {
       replacements: { c: clientId, p: plotId },
+      transaction: transaction
     });
+    
+    await transaction.commit();
     res.json({ message: "Rezerwacja udana" });
+    
   } catch (error) {
+    await transaction.rollback();
     res.status(500).json({ error: error.message });
   }
 });
@@ -193,12 +199,19 @@ router.post("/reserve", async (req, res) => {
 // Remove plot reservation
 router.post("/remove-reservation", async (req, res) => {
   const { clientId, plotId } = req.body;
+  const transaction = await db.sequelize.transaction();
+
   try {
     await db.sequelize.query("CALL p_remove_reservation(:c, :p)", {
       replacements: { c: clientId, p: plotId },
+      transaction: transaction
     });
+    
+    await transaction.commit();
     res.json({ message: "Rezerwacja usunięta" });
+    
   } catch (error) {
+    await transaction.rollback();
     res.status(500).json({ error: error.message });
   }
 });
